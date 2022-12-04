@@ -17,7 +17,7 @@ def part1(data):
     for assignment in data:
         ass = assignment[0]
         ign = assignment[1]
-        fullycontains = fulloverlap(ass, ign)
+        fullycontains += fulloverlap(ass, ign)
     return fullycontains
 
 
