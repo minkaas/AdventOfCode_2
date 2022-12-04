@@ -1,8 +1,4 @@
 input <- readLines("input")
-one <- 0
-two <- 0
-three <- 0
-four <- 0
 fullycontained <- 0
 partlycontained <- 0
 for (assignments in input) {
