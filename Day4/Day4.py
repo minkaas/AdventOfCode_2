@@ -17,10 +17,7 @@ def part1(data):
     for assignment in data:
         ass = assignment[0]
         ign = assignment[1]
-        if ass[0] >= ign[0] and ass[1] <= ign[1]:
-            fullycontains += 1
-        elif ass[0] <= ign[0] and ass[1] >= ign[1]:
-            fullycontains += 1
+        fullycontains = fulloverlap(ass, ign)
     return fullycontains
 
 
@@ -38,6 +35,12 @@ def solve(puzzle_input):
     sol1 = part1(data)
     sol2 = part2(data)
     return sol1, sol2
+
+
+def fulloverlap(tuple1, tuple2):
+    set1 = set(list(range(tuple1[0], tuple1[1]+1)))
+    set2 = set(list(range(tuple2[0], tuple2[1]+1)))
+    return set1.issubset(set2) or set2.issubset(set1)
 
 
 def overlap(tuple1, tuple2):
