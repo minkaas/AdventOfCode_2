@@ -8,7 +8,7 @@ def parse(puzzle_input):
     first = True
     instructiontime = False
     for value in values:
-        if not instructiontime and value != "" and not " 1   2   3   4   5   6   7   8   9" in value:
+        if not instructiontime and value != "" and not " 1   2 " in value:
             value = [value[i:i + 4] for i in range(0, len(value), 4)]
             if first:
                 for i in range(0, len(value)):
@@ -19,7 +19,7 @@ def parse(puzzle_input):
                     crates[i].insert(0, value[i])
         else:
             instructiontime = True
-        if instructiontime and value != "" and not " 1   2   3   4   5   6   7   8   9" in value:
+        if instructiontime and value != "" and not " 1   2 " in value:
             instr = [int(s) for s in value.split() if s.isdigit()]
             instructions.append(instr)
     return crates, instructions
