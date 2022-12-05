@@ -5,15 +5,12 @@ def parse(puzzle_input):
     values = puzzle_input.split("\n")
     crates = []
     instructions = []
-    first = True
     instructiontime = False
     for value in values:
         if not instructiontime and value != "" and not " 1   2 " in value:
             value = [value[i:i + 4] for i in range(0, len(value), 4)]
-            if first:
-                for i in range(0, len(value)):
-                    crates.append([])
-                first = False
+            while len(crates) < len(value):
+                crates.append([])
             for i in range(0, len(value)):
                 if "[" in value[i]:
                     crates[i].insert(0, value[i])
@@ -60,5 +57,6 @@ def run():
     solutions = solve(puzzle_input)
     print(solutions[0])
     print(solutions[1])
+
 
 run()
