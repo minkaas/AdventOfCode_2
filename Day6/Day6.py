@@ -29,6 +29,5 @@ def run():
     solutions = solve(puzzle_input)
     print(solutions)
 
-
 run()
 
