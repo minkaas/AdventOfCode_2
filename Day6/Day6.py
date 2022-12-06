@@ -26,7 +26,6 @@ def part2(data):
 def one_liner(n):
     return [i+n for i in range(0, len(list(pathlib.Path("input").read_text().strip()))) if len(set(list(pathlib.Path("input").read_text().strip())[i:i+n])) == n][0]
 
-
 def solve(puzzle_input):
     data = parse(puzzle_input)
     sol1 = one_liner(4)
