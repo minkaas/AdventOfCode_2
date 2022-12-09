@@ -15,7 +15,7 @@ def are_touching(tail, head):
     return abs(tail[0] - head[0]) <= 1 and abs(tail[1] - head[1]) <= 1
 
 
-def fix_2knots(tail, head):
+def hey_i_know_these_2_knots_should_be_closer_together_fix_that(tail, head):
     same_row, same_column = not(tail[0]-head[0]), not(tail[1]-head[1])
     pos_row, pos_column = 1 if head[0] - tail[0] > 0 else -1, 1 if head[1] - tail[1] > 0 else -1
     touching = are_touching(tail, head)
@@ -48,7 +48,7 @@ def part2(data, knots):
                 head = (head[0], head[1]-1)
             tails[0] = head
             for i in range(1, len(tails)):
-                tails[i] = fix_2knots(tails[i], tails[i-1])
+                tails[i] = hey_i_know_these_2_knots_should_be_closer_together_fix_that(tails[i], tails[i - 1])
             positions.append(tails[knots])
     return len(set(positions))
 
