@@ -1,3 +1,4 @@
+import copy
 import pathlib
 
 
@@ -14,15 +15,19 @@ def are_touching(tail, head):
     return abs(tail[0] - head[0]) <= 1 and abs(tail[1] - head[1]) <= 1
 
 
-def are_touching_10(tails, head):
-    tail = tails[0]
-    if abs(tail[0] - head[0]) <= 1 and abs(tail[1] - head[1]) <= 1:
-        for i in range(1, len(tails)):
-            if not abs(tails[i][0] - tails[i-1][0]) <= 1 or not abs(tails[i][1] - tails[i-1][1]) <= 1:
-                return False, i
-    else:
-        return False, 0
-    return True, 0
+def fix_2knots(tail, head, prev):
+    same_column = tail[0]-head[0] == 0   #(0,0), (2,2)
+    same_row = tail[1]-head[1] == 0
+    pos_row = 1 if head[1] - tail[1] > 0 else -1
+    pos_column = 1 if head[0] - tail[0] > 0 else -1
+    touching = are_touching(tail, head)
+    if not same_row and not same_column and not touching:
+        tail = (tail[0]+pos_column, tail[1]+pos_row)
+    elif not same_row and not touching:
+        tail = (tail[0], tail[1]+pos_row)
+    elif not same_column and not touching:
+        tail = (tail[0]+pos_column, tail[1])
+    return tail
 
 
 
@@ -56,12 +61,14 @@ def part2(data):
         tails.append((0,0))
     head = (0, 0)    # (x, y)
     prevhead = head
+    prevtails = copy.deepcopy(tails)
     positions = [tails[8]]
     for direction in data:
         dir = direction[0]
         steps = direction[1]
         for step in range(0, steps):
             prevhead = head
+            prevtails = copy.deepcopy(tails)
             if dir == "L":      #(x-1, y)
                 head = (head[0]-1, head[1])
             elif dir == "U":    #(x, y+1
@@ -70,15 +77,12 @@ def part2(data):
                 head = (head[0]+1, head[1])
             elif dir == "D":
                 head = (head[0], head[1]-1)
-            are_touching, which_head = are_touching_10(tails, head)
-            if not are_touching:
-                prevtail = prevhead
-                while not are_touching:
-                    prev = tails[which_head]
-                    tails[which_head] = prevtail
-                    are_touching, which_head = are_touching_10(tails, head)
-                    prevtail = prev
-                positions.append(tails[8])
+            for i in range(0, len(tails)):
+                if i == 0:
+                    tails[0] = fix_2knots(tails[0], head, prevhead)
+                else:
+                    tails[i] = fix_2knots(tails[i], tails[i-1], prevtails[i-1])
+            positions.append(tails[8])
     return len(set(positions))
 
 def solve(puzzle_input):
@@ -89,7 +93,7 @@ def solve(puzzle_input):
 
 
 def run():
-    puzzle_input = pathlib.Path("test").read_text().strip()
+    puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
 
