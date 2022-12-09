@@ -37,7 +37,6 @@ def part1(data):
         richting = direction[0]
         steps = direction[1]
         for step in range(0, steps):
-            prevhead = head
             if richting == "L":
                 head = (head[0]-1, head[1])
             elif richting == "U":
