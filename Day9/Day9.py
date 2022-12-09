@@ -16,7 +16,7 @@ def are_touching(tail, head):
 
 
 def fix_2knots(tail, head):
-    same_row, same_column = tail[0]-head[0] == 0, tail[1]-head[1] == 0
+    same_row, same_column = not(tail[0]-head[0]), not(tail[1]-head[1])
     pos_row, pos_column = 1 if head[0] - tail[0] > 0 else -1, 1 if head[1] - tail[1] > 0 else -1
     touching = are_touching(tail, head)
     if not same_row and not same_column and not touching:
