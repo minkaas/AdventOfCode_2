@@ -28,33 +28,11 @@ def fix_2knots(tail, head):
     return tail
 
 
-
-def part1(data):
-    tail = (0,0)
-    head = (0,0)    # (x, y)
-    positions = [tail]
-    for direction in data:
-        richting = direction[0]
-        steps = direction[1]
-        for step in range(0, steps):
-            if richting == "L":
-                head = (head[0]-1, head[1])
-            elif richting == "U":
-                head = (head[0], head[1]+1)
-            elif richting == "R":
-                head = (head[0]+1, head[1])
-            elif richting == "D":
-                head = (head[0], head[1]-1)
-            tail = fix_2knots(tail, head)
-            positions.append(tail)
-    return len(set(positions))
-
-
-def part2(data):
+def part2(data, knots):
     tails = []
-    for i in range(0, 10):
+    for i in range(0, knots+1):
         tails.append((0,0))
-    positions = [tails[9]]
+    positions = [tails[knots]]
     for direction in data:
         richting = direction[0]
         steps = direction[1]
@@ -71,13 +49,14 @@ def part2(data):
             tails[0] = head
             for i in range(1, len(tails)):
                 tails[i] = fix_2knots(tails[i], tails[i-1])
-            positions.append(tails[9])
+            positions.append(tails[knots])
     return len(set(positions))
+
 
 def solve(puzzle_input):
     data = parse(puzzle_input)
-    sol1 = part1(data)
-    sol2 = part2(data)
+    sol1 = part2(data, 1)
+    sol2 = part2(data, 9)
     return sol1, sol2
 
 
