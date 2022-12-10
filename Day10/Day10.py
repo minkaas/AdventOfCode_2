@@ -17,24 +17,24 @@ def part1(data):
         instruction = instruction.split(" ")
         if instruction[0] == "noop":
             cycle += 1
-            signal_strength += checkCycle(cycle, register)
+            signal_strength += check_cycle(cycle, register)
         else:
             to_add = int(instruction[1])
             for i in range(0, 2):
                 cycle += 1
-                signal_strength += checkCycle(cycle, register)
+                signal_strength += check_cycle(cycle, register)
             register += to_add
     return signal_strength
 
 
-def checkCycle(cycle, register):
+def check_cycle(cycle, register):
     if (cycle - 20) % 40 == 0:
         print(cycle * register)
         return cycle * register
     return 0
 
 
-def checkSprite(cycle, sprite):
+def check_sprite(cycle, sprite):
     if abs(cycle - sprite) == 1 or (cycle - sprite) == 0:
         return '#'
     return '.'
@@ -48,12 +48,12 @@ def part2(data):
         instruction = instruction.split(" ")
         if instruction[0] == "noop":
             cycle += 1
-            image[cycle // 40].append(checkSprite(cycle % 40, sprite_position))
+            image[cycle // 40].append(check_sprite(cycle % 40, sprite_position))
         else:
             to_add = int(instruction[1])
             for i in range(0, 2):
                 cycle += 1
-                image[cycle // 40].append(checkSprite(cycle % 40, sprite_position))
+                image[cycle // 40].append(check_sprite(cycle % 40, sprite_position))
             sprite_position += to_add
     return image
 
