@@ -1,5 +1,5 @@
 import pathlib
-
+import time
 
 class Monkey:
     def __init__(self, items, operation, opamount, divamount, true, false):
@@ -33,7 +33,7 @@ def parse(puzzle_input):
     return monkeys
 
 
-def do_monkey(erjan, monkeys, part2 = False):
+def do_monkey(erjan, monkeys, part2=False, chosen_modulo=0):
     while len(erjan.items) != 0:
         item = erjan.items.pop(0)
         erjan.activity += 1
@@ -45,6 +45,8 @@ def do_monkey(erjan, monkeys, part2 = False):
             worry_level = item * item
         if not part2:
             worry_level = worry_level // 3
+        else:
+            worry_level %= chosen_modulo
         if worry_level % erjan.divamount == 0:
             monkeys[erjan.true].items.append(worry_level)
         else:
@@ -66,13 +68,17 @@ def part1(data):
 
 
 def part2(data):
+    chosen_modulo = 1
+    for monk in data:
+        chosen_modulo *= monk.divamount
     activities = []
     result = []
+    starttime = time.time()
     for i in range(0, 10000):
         for monk in data:
-            result = do_monkey(monk, data, True)
+            result = do_monkey(monk, data, True, chosen_modulo)
         if i % 100 == 0:
-            print("Done with round " + str(i))
+            print("Done with round " + str(i) + " in " + str(time.time() - starttime) + " seconds")
     for monk in result:
         activities.append(monk.activity)
     activities.sort()
