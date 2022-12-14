@@ -1,4 +1,5 @@
 import pathlib
+import time
 
 
 def parse(puzzle_input):
@@ -27,7 +28,7 @@ def parse(puzzle_input):
                 for j in range(path[i-1][1], path[i][1]+1):
                     covered.append((path[i][0], j))
         covered.append(path[len(path)-1])
-    covered = list(set(covered))
+    covered = set(covered)
     return covered
 
 
@@ -56,7 +57,7 @@ def new_sand_grain(covered):
             on_something = True
             if (sand_y-1, sand_x+1) in covered:           # is left diagonally free
                 if (sand_y+1, sand_x+1) in covered:       # is right diagonally free
-                    covered.append(new_sand_pos)          # if both are not free, just keep it where it is
+                    covered.add(new_sand_pos)          # if both are not free, just keep it where it is
                 else:
                     new_sand_pos = (sand_y+1, sand_x+1)   # sand goes to the right
                     on_something = False
@@ -74,11 +75,12 @@ def new_sand_grain(covered):
 
 def part2(covered):
     blocked = False
+    starttime = time.time()
     highest_x = 0
     for coords in covered:
         highest_x = max(highest_x, coords[1])
     for i in range(0, 1000):
-        covered.append((i, highest_x+2))
+        covered.add((i, highest_x+2))
     units = 0
     while not blocked:
         covered = new_sand_grain(covered)
@@ -87,6 +89,7 @@ def part2(covered):
         units += 1
         if units % 100 == 0:
             print(units)
+    print(time.time() - starttime)
     return units
 
 def solve(puzzle_input):
