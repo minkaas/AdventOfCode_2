@@ -1,42 +1,38 @@
 import pathlib
-import re
 
 
 def parse(puzzle_input):
-    values = puzzle_input.split("\n")
+    games = puzzle_input.split("\n")
     data = []
-    for value in values:
-        data.append(value.split(":")[1])
-    return data
-
-def count_cubes(game):
-    games = game.split(";")
-    result = True
     for game in games:
-        if result:
-            cubes = game.split(",")
-            for cube in cubes:
-                if "red" in cube:
-                    number = re.search(r'\d+', cube)
-                    if result:
-                        result = int(number.group()) <= 12
-                if "green" in cube:
-                    number = re.search(r'\d+', cube)
-                    if result:
-                        result = int(number.group()) <= 13
-                if "blue" in cube:
-                    number = re.search(r'\d+', cube)
-                    if result:
-                        result = int(number.group()) <= 14
-    return result
+        data.append(game.split(":")[1])  # Remove the 'Game x' part
+    return data
 
 
 def part1(data):
     result = 0
     for i in range(len(data)):
         game = data[i]
-        if count_cubes(game):
+        if is_possible(game):
             result += i + 1
+    return result
+
+
+def is_possible(game):
+    rounds = game.split(";")
+    result = True
+    for one_round in rounds:
+        if result:
+            cubes = one_round.split(",")
+            for cube in cubes:
+                number = int(cube.split(" ")[1])
+                colour = cube.split(" ")[2]
+                if colour == "red":
+                    result = number <= 12 if result else False
+                elif colour == "green":
+                    result = number <= 13 if result else False
+                elif colour == "blue":
+                    result = number <= 14 if result else False
     return result
 
 
@@ -49,28 +45,21 @@ def part2(data):
 
 
 def get_power(game):
-    games = game.split(";")
+    rounds = game.split(";")
     red = 0
     blue = 0
     green = 0
-    for game in games:
-        r = 0
-        b = 0
-        g = 0
-        cubes = game.split(",")
+    for one_round in rounds:
+        cubes = one_round.split(",")
         for cube in cubes:
-            if "red" in cube:
-                number = re.search(r'\d+', cube)
-                r = max(r, int(number.group()))
-            if "green" in cube:
-                number = re.search(r'\d+', cube)
-                g = max(g, int(number.group()))
-            if "blue" in cube:
-                number = re.search(r'\d+', cube)
-                b = max(b, int(number.group()))
-        red = max(r, red)
-        green = max(g, green)
-        blue = max(b, blue)
+            number = int(cube.split(" ")[1])
+            colour = cube.split(" ")[2]
+            if colour == "red":
+                red = max(red, number)
+            elif colour == "green":
+                green = max(green, number)
+            elif colour == "blue":
+                blue = max(blue, number)
     return red * green * blue
 
 
