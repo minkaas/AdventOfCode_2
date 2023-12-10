@@ -84,18 +84,36 @@ def part1(data, start):
     return len(pipe_data) // 2
 
 
-
 def part2(data, start):
     pipe_data = get_pipe(data, start)
     inside = False
     inside_count = 0
+    (i, j, s) = pipe_data[0]
+    # I am sorry this is hardcoded, did not feel like making it good
+    pipe_data[0] = (i, j, "7")
+    pipe_data[-1] = (i, j, "7")
+    turn = False
+    turn_start = ""
     for i in range(1, len(data)-1):
         for j in range(1, len(data[0])-1):
             symbol = data[i][j]
             if (i, j, symbol) in pipe_data:
-
-                if symbol != "-" and symbol !="F":
+                if symbol == "|":
                     inside = not inside
+                elif not turn and symbol == "F":
+                    turn = True
+                    turn_start = "F"
+                elif not turn and symbol == "L":
+                    turn = True
+                    turn_start = "L"
+                elif turn and symbol == "7":
+                    turn = False
+                    if turn_start == "L":
+                        inside = not inside
+                elif turn and symbol == "J":
+                    turn = False
+                    if turn_start == "F":
+                        inside = not inside
             elif inside:
                 inside_count += 1
     return inside_count
@@ -109,7 +127,7 @@ def solve(puzzle_input):
 
 
 def run():
-    puzzle_input = pathlib.Path("test").read_text().strip()
+    puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
 
