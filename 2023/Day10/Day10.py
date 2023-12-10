@@ -1,4 +1,5 @@
 import pathlib
+from time import time
 
 
 def parse(puzzle_input):
@@ -79,18 +80,13 @@ def get_pipe(data, start):
     return result[:-1]
 
 
-def part1(data, start):
-    pipe_data = get_pipe(data, start)
+def part1(pipe_data):
     return len(pipe_data) // 2
 
 
-def part2(data, start):
-    pipe_data = get_pipe(data, start)
+def part2(pipe_data, data):
     inside = False
     inside_count = 0
-    (i, j, s) = pipe_data[0]
-    # I am sorry this is hardcoded, did not feel like making it good
-    # pipe_data[0] = (i, j, "7")
     turn = False
     turn_start = ""
     for i in range(1, len(data)-1):
@@ -120,15 +116,18 @@ def part2(data, start):
 
 def solve(puzzle_input):
     data, start = parse(puzzle_input)
-    sol1 = part1(data, start)
-    sol2 = part2(data, start)
+    pipe_data = get_pipe(data, start)
+    sol1 = part1(pipe_data)
+    sol2 = part2(pipe_data, data)
     return sol1, sol2
 
 
 def run():
-    puzzle_input = pathlib.Path("test").read_text().strip()
+    start_time = time()
+    puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
+    print("This took ", time() - start_time)
 
 
 run()
