@@ -76,7 +76,7 @@ def get_pipe(data, start):
         (i, j, pipe) = get_next(result[-2], result[-1], data)
         result.append((i, j, pipe))
         current_value = pipe
-    return result
+    return result[:-1]
 
 
 def part1(data, start):
@@ -90,14 +90,13 @@ def part2(data, start):
     inside_count = 0
     (i, j, s) = pipe_data[0]
     # I am sorry this is hardcoded, did not feel like making it good
-    pipe_data[0] = (i, j, "7")
-    pipe_data[-1] = (i, j, "7")
+    # pipe_data[0] = (i, j, "7")
     turn = False
     turn_start = ""
     for i in range(1, len(data)-1):
         for j in range(1, len(data[0])-1):
             symbol = data[i][j]
-            if (i, j, symbol) in pipe_data:
+            if (i, j, symbol) in pipe_data or (i, j, "7") in pipe_data:
                 if symbol == "|":
                     inside = not inside
                 elif not turn and symbol == "F":
@@ -127,7 +126,7 @@ def solve(puzzle_input):
 
 
 def run():
-    puzzle_input = pathlib.Path("input").read_text().strip()
+    puzzle_input = pathlib.Path("test").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
 
