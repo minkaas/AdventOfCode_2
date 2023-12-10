@@ -92,7 +92,7 @@ def part2(pipe_data, data):
     for i in range(1, len(data)-1):
         for j in range(1, len(data[0])-1):
             symbol = data[i][j]
-            if (i, j, symbol) in pipe_data or (i, j, "7") in pipe_data:
+            if (i, j, symbol) in pipe_data:
                 if symbol == "|":
                     inside = not inside
                 elif not turn and symbol == "F":
