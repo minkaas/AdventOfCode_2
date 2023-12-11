@@ -1,4 +1,5 @@
 import pathlib
+from time import time
 
 
 def parse(puzzle_input):
@@ -18,7 +19,6 @@ def part1(data):
     result = 0
     for value in data:
         num1, num2 = get_first_and_last_dig(value)
-        print(num1, num2)
         result += int(num1) * 10 + int(num2)
     return result
 
@@ -54,9 +54,11 @@ def solve(puzzle_input):
 
 
 def run():
+    start_time = time()
     puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
+    print("This took ", time() - start_time)
 
 
 run()

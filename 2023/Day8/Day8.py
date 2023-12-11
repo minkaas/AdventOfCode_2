@@ -1,5 +1,6 @@
 import math
 import pathlib
+from time import time
 
 
 def parse(puzzle_input):
@@ -75,9 +76,11 @@ def solve(puzzle_input):
 
 
 def run():
+    start_time = time()
     puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
+    print("This took ", time() - start_time)
 
 
 run()

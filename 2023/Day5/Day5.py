@@ -115,9 +115,11 @@ def solve(puzzle_input):
 
 
 def run():
+    start_time = time()
     puzzle_input = pathlib.Path("input").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
+    print("This took ", time() - start_time)
 
 
 run()
