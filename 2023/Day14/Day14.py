@@ -17,44 +17,6 @@ def parse(puzzle_input):
         platform.append(char_list)
     return platform
 
-# 0 is north, 1 is south, 2 is -> east, 3 is <- west
-def tilt(platform, direction):
-    down = True if direction == 1 or direction == 2 else False
-    trans = True if direction == 2 or direction == 3 else False
-    platform = transpose(platform) if trans else platform
-    result = 0
-    if not down: # north
-        for i in range(len(platform[0])):
-            column_total = 0
-            moving_rocks = 0
-            row_load = 0
-            for j in range(len(platform)-1, -1, -1):
-                if platform[j][i] == 2:
-                    moving_rocks += 1
-                if platform[j][i] == 1:
-                    for k in range(moving_rocks):
-                        column_total += row_load - k
-                    moving_rocks = 0
-                row_load += 1
-            for k in range(moving_rocks):
-                column_total += row_load - k
-            result += column_total
-    if down:
-        for i in range(len(platform[0])):
-            column_total = 0
-            moving_rocks = 0
-            row_load = len(platform)
-            for j in range(0, len(platform), 1):
-                if platform[j][i] == 2:
-                    moving_rocks += 1
-                if platform[j][i] == 1:
-                    for k in range(moving_rocks):
-                        column_total += row_load + k
-                    moving_rocks = 0
-                row_load -= 1
-            result += column_total
-    return result
-
 
 def naive_tilting(platform):
     for i in range(len(platform[0])):
@@ -89,9 +51,6 @@ def calc_northbeams(platform):
         result += column_total
     return result
 
-def transpose(matrix):
-    return list(map(list, zip(*matrix)))
-
 
 def part1(platform):
     result = 0
@@ -99,7 +58,6 @@ def part1(platform):
     result += calc_northbeams(platform)
     return result
 
-# 0 is north, 1 is south, 2 is -> east, 3 is <- west
 
 def part2(platform):
     possibles_states = {}
@@ -109,6 +67,7 @@ def part2(platform):
     repeats = 0
     for i in range(1000):
         for j in range(4):
+            # rotate and tilt 4 times
             platform = naive_tilting(platform)
             platform = rotate(platform)
         if loop and possibles_states[str(platform)] == repeats:
@@ -136,6 +95,7 @@ def solve(puzzle_input):
 def print_platform(platform):
     for plat in platform:
         print(plat)
+
 
 def run():
     start_time = time()
