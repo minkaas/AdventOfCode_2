@@ -77,12 +77,7 @@ def part2(platform):
         else:
             loop = True
             repeats = 1000000000 % (len(possibles_states) - 1)
-    for key in possibles_states:
-        print(possibles_states[key])
-    print(repeats)
-
-    result = calc_northbeams(platform)
-    return result
+    return calc_northbeams(platform)
 
 
 def solve(puzzle_input):
