@@ -68,15 +68,40 @@ def part1(workflows, ratings):
     return result
 
 
-def part2(workflows, ratings):
+# do something with ranges for part 2
+
+def do_something(workflows, ratings):
+    queue = [("in", ratings)]
+    for flow, rate in queue:
+        to_check = workflows[flow].replace(':', ',').split(",")
+        i = 0
+        while i < len(to_check):
+            if '<' in to_check[i] or '>' in to_check[i]:
+                val = to_check[i][0]
+            elif to_check[i] == 'A':
+                return True
+            elif to_check[i] == 'R':
+                return False
+
+
+def part2(workflows):
     result = 0
+    ratings = []
+    for x in range(1, 4001):
+        for m in range(1, 4001):
+            for a in range(1, 4001):
+                for s in range(1, 4001):
+                    ratings.append([('x', x), ('m', m), ('a', a), ('s', s)])
+    for part in ratings:
+        if check_acceptance(part, "in", workflows):
+            result += 1
     return result
 
 
 def solve(puzzle_input):
     workflows, ratings = parse(puzzle_input)
     sol1 = part1(workflows, ratings)
-    sol2 = part2(workflows, ratings)
+    sol2 = part2(workflows)
     return sol1, sol2
 
 
