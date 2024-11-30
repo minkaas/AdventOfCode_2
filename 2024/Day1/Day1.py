@@ -6,23 +6,12 @@ def parse(puzzle_input):
     values = puzzle_input.split("\n")
     data = []
     for value in values:
-        value = value.split("~")
-        start = value[0].split(",")
-        end = value[1].split(",")
-        data.append((start, end))
+        data.append(value)
     return data
 
 
 def part1(data):
     result = 0
-    brick_map = [[[]]]
-    print(data)
-    for brick in data:
-        start, end = brick
-        x, y, z = start
-        x1, y1, z1 = end
-
-
     return result
 
 
@@ -40,7 +29,7 @@ def solve(puzzle_input):
 
 def run():
     start_time = time()
-    puzzle_input = pathlib.Path("test").read_text().strip()
+    puzzle_input = pathlib.Path("severity").read_text().strip()
     solutions = solve(puzzle_input)
     print(solutions)
     print("This took ", time() - start_time)
