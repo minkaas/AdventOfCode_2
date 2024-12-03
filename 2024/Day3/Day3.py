@@ -1,27 +1,33 @@
 import pathlib
 from time import time
-
-
-def parse(puzzle_input):
-    values = puzzle_input.split("\n")
-    data = []
-    for value in values:
-        data.append(value)
-    return data
+import re
 
 
 def part1(data):
+    all_muls = re.findall("mul\(\d+,\d+\)", data)
     result = 0
+    for inst in all_muls:
+        digits = re.findall('\d+', inst)
+        result += int(digits[0]) * int(digits[1])
     return result
 
 
 def part2(data):
+    all_muls = re.findall("mul\(\d+,\d+\)|do\(\)|don't\(\)", data)
+    disable = False
     result = 0
+    for inst in all_muls:
+        if inst == "do()":
+            disable = False
+        elif inst == "don't()":
+            disable = True
+        elif not disable:
+            digits = re.findall('\d+', inst)
+            result += int(digits[0]) * int(digits[1])
     return result
 
 
-def solve(puzzle_input):
-    data = parse(puzzle_input)
+def solve(data):
     sol1 = part1(data)
     sol2 = part2(data)
     return sol1, sol2
