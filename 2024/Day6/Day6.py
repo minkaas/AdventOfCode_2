@@ -88,38 +88,38 @@ def causes_loop(data, start, obstruction):
             on_route = True
             if data[current[0]-1][current[1]] == 0 and (current[0]-1, current[1]) != obstruction:
                 current = (current[0]-1, current[1], 0)
+            else:
+                current = (current[0], current[1], 1)
                 if current in result:
                     return False
                 result.add(current)
-            else:
-                current = (current[0], current[1], 1)
         elif current[2] == 1 and current[1] < len(data[0]) - 1:
             on_route = True
             if data[current[0]][current[1]+1] == 0 and (current[0], current[1]+1) != obstruction:
                 current = (current[0], current[1]+1, 1)
+            else:
+                current = (current[0], current[1], 2)
                 if current in result:
                     return False
                 result.add(current)
-            else:
-                current = (current[0], current[1], 2)
         elif current[2] == 2 and current[0] < len(data) - 1:
             on_route = True
             if data[current[0]+1][current[1]] == 0 and (current[0]+1, current[1]) != obstruction:
                 current = (current[0]+1, current[1], 2)
+            else:
+                current = (current[0], current[1], 3)
                 if current in result:
                     return False
                 result.add(current)
-            else:
-                current = (current[0], current[1], 3)
         elif current[2] == 3 and current[1] > 0:
             on_route = True
             if data[current[0]][current[1] - 1] == 0 and (current[0], current[1]-1) != obstruction:
                 current = (current[0], current[1] - 1, 3)
+            else:
+                current = (current[0], current[1], 0)
                 if current in result:
                     return False
                 result.add(current)
-            else:
-                current = (current[0], current[1], 0)
     return True
 
 
