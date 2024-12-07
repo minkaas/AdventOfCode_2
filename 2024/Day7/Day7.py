@@ -15,81 +15,62 @@ def parse(puzzle_input):
     return data
 
 
-def add_func(test_val, equation, part2=False):
-    current = equation[0]
-    equation = equation[1:]
-    if current == test_val and len(equation) == 0:
+def addv(current, equation, i, part_2=False):
+    if current > equation[0]:
+        return False
+    if i == len(equation) and current == equation[0]:
         return True
-    if len(equation) == 0:
+    elif i == len(equation):
         return False
-    if current > test_val:
-        return False
-    equation[0] += current
-    if current > test_val:
-        return False
-    if part2:
-        return add_func(test_val, equation, True) | mult_func(test_val, equation, True) | conc_func(test_val, equation)
-    return add_func(test_val, equation) | mult_func(test_val, equation)
+    new_current = current + equation[i]
+    if part_2:
+        return addv(new_current, equation, i + 1, True) or multv(new_current, equation, i + 1, True) or concv(new_current, equation, i+1)
+    return addv(new_current, equation, i+1) or multv(new_current, equation, i+1)
 
 
-def mult_func(test_val, equation, part2=False):
-    current = equation[0]
-    equation = equation[1:]
-    if current == test_val and len(equation) == 0:
+def multv(current, equation, i, part_2=False):
+    if current > equation[0]:
+        return False
+    if i == len(equation) and current == equation[0]:
         return True
-    if len(equation) == 0:
+    elif i == len(equation):
         return False
-    equation[0] *= current
-    if current > test_val:
-        return False
-    if part2:
-        return add_func(test_val, equation, True) | mult_func(test_val, equation, True) | conc_func(test_val, equation)
-    return add_func(test_val, equation) | mult_func(test_val, equation)
-
-
-def can_make(calib, part2=False):
-    test_val = calib.pop(0)
-    if part2:
-        return add_func(test_val, calib, True) | mult_func(test_val, calib, True) | conc_func(test_val, calib)
-    return add_func(test_val, calib) | mult_func(test_val, calib)
+    new_current = current * equation[i]
+    if part_2:
+        return addv(new_current, equation, i + 1, True) or multv(new_current, equation, i + 1, True) or concv(new_current, equation, i+1)
+    return addv(new_current, equation, i+1) or multv(new_current, equation, i+1)
 
 
 def part1(data):
     result = 0
     for calibration in data:
-        to_add = calibration[0]
-        if can_make(calibration):
-            result += to_add
+        if addv(calibration[1], calibration, 2) or multv(calibration[1], calibration, 2):
+            result += calibration[0]
     return result
 
 
-def conc_func(test_val, equation):
-    current = equation[0]
-    equation = equation[1:]
-    if current == test_val and len(equation) == 0:
+def concv(current, equation, i):
+    if current > equation[0]:
+        return False
+    if i == len(equation) and current == equation[0]:
         return True
-    if len(equation) == 0:
+    elif i == len(equation):
         return False
-    equation[0] = int(str(current) + str(equation[0]))
-    if current > test_val:
-        return False
-    return add_func(test_val, equation, True) | mult_func(test_val, equation, True) | conc_func(test_val, equation)
-
+    new_current = int(str(current) + str(equation[i]))
+    return addv(new_current, equation, i + 1, True) or multv(new_current, equation, i + 1, True) or concv(new_current, equation, i+1)
 
 
 def part2(data):
     result = 0
     for calibration in data:
-        to_add = calibration[0]
-        if can_make(calibration, True):
-            result += to_add
+        if addv(calibration[1], calibration, 2, True) or multv(calibration[1], calibration, 2, True) or concv(calibration[1], calibration, 2):
+            result += calibration[0]
     return result
 
 
 def solve(puzzle_input):
     data = parse(puzzle_input)
     sol1 = part1(data)
-    data = parse(puzzle_input)
     sol2 = part2(data)
     return sol1, sol2
 
