@@ -55,9 +55,8 @@ def covered(nodes, coord):
 
 def part1(data, nodes):
     result = []
-    antinodes = {}
+    antinodes = []
     for node in nodes:
-        antinodes[node] = []
         all_nodes = nodes[node]
         for k in range(0, len(all_nodes)):
             for l in range(k+1, len(all_nodes)):
@@ -65,42 +64,33 @@ def part1(data, nodes):
                 dist_1, dist_2 = distance(coord_1, coord_2), distance(coord_2, coord_1)
                 anti_1, anti_2 = (coord_1[0] + dist_1[0], coord_1[1] + dist_1[1]), (coord_2[0] + dist_2[0], coord_2[1] + dist_2[1])
                 if within_bounds(anti_1[0], anti_1[1], data):
-                    antinodes[node].append(anti_1)
+                    antinodes.append(anti_1)
                 if within_bounds(anti_2[0], anti_2[1], data):
-                    antinodes[node].append(anti_2)
-    all_antis = []
-    for values in antinodes.values():
-        result.extend(values)
-        all_antis.extend(values)
-    result = list(set(result))
+                    antinodes.append(anti_2)
+    result = list(set(antinodes))
     return len(result)
 
 
 def part2(data, nodes):
     result = []
-    antinodes = {}
+    antinodes = []
     for node in nodes:
-        antinodes[node] = []
         all_nodes = nodes[node]
         for k in range(0, len(all_nodes)):
             for l in range(k+1, len(all_nodes)):
                 coord_1, coord_2 = all_nodes[k], all_nodes[l]
-                antinodes[node].append(coord_1)
-                antinodes[node].append(coord_2)
+                antinodes.append(coord_1)
+                antinodes.append(coord_2)
                 dist_1, dist_2 = distance(coord_1, coord_2), distance(coord_2, coord_1)
                 anti_1, anti_2 = (coord_1[0] + dist_1[0], coord_1[1] + dist_1[1]), (coord_2[0] + dist_2[0], coord_2[1] + dist_2[1])
                 while within_bounds(anti_1[0], anti_1[1], data):
-                    antinodes[node].append(anti_1)
+                    antinodes.append(anti_1)
                     anti_1 = (anti_1[0] + dist_1[0], anti_1[1] + dist_1[1])
                 while within_bounds(anti_2[0], anti_2[1], data):
-                    antinodes[node].append(anti_2)
+                    antinodes.append(anti_2)
                     anti_2 = (anti_2[0] + dist_2[0], anti_2[1] + dist_2[1])
-    all_antis = []
-    for values in antinodes.values():
-        result.extend(values)
-        all_antis.extend(values)
-    result = list(set(result))
-    print_matrix(data, all_antis)
+    result = list(set(antinodes))
+    print_matrix(data, antinodes)
     return len(result)
 
 
