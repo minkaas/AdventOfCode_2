@@ -5,25 +5,109 @@ from time import time
 def parse(puzzle_input):
     values = puzzle_input.split("\n")
     data = []
-    for value in values:
-        data.append(value)
-    return data
+    nodes = {}
+    for i in range(0, len(values)):
+        temp = []
+        for j in range(0, len(values[i])):
+            temp.append(values[i][j])
+            if values[i][j] != '.':
+                if values[i][j] in nodes:
+                    nodes[values[i][j]].append((i, j))
+                else:
+                    nodes[values[i][j]] = [(i, j)]
+        data.append(temp)
+    return data, nodes
 
 
-def part1(data):
-    result = 0
-    return result
+def print_matrix(data, coords):
+    if len(coords) > 0:
+        for i in range(0, len(data)):
+            to_print = ""
+            for j in range(0, len(data[i])):
+                if (i, j) in coords:
+                    to_print += '#'
+                else:
+                    to_print += data[i][j]
+            print(to_print)
+    else:
+        for row in data:
+            to_print = ""
+            for character in row:
+                to_print += character
+            print(to_print)
 
 
-def part2(data):
-    result = 0
-    return result
+def within_bounds(i, j, data):
+    return 0 <= i < len(data) and 0 <= j < len(data[i])
+
+
+def distance(coord_1, coord_2):
+    return coord_1[0] - coord_2[0], coord_1[1] - coord_2[1]
+
+
+def covered(nodes, coord):
+    for node in nodes:
+        if coord in nodes[node]:
+            return node, coord[0], coord[1]
+    else:
+        return False
+
+
+def part1(data, nodes):
+    result = []
+    antinodes = {}
+    for node in nodes:
+        antinodes[node] = []
+        all_nodes = nodes[node]
+        for k in range(0, len(all_nodes)):
+            for l in range(k+1, len(all_nodes)):
+                coord_1, coord_2 = all_nodes[k], all_nodes[l]
+                dist_1, dist_2 = distance(coord_1, coord_2), distance(coord_2, coord_1)
+                anti_1, anti_2 = (coord_1[0] + dist_1[0], coord_1[1] + dist_1[1]), (coord_2[0] + dist_2[0], coord_2[1] + dist_2[1])
+                if within_bounds(anti_1[0], anti_1[1], data):
+                    antinodes[node].append(anti_1)
+                if within_bounds(anti_2[0], anti_2[1], data):
+                    antinodes[node].append(anti_2)
+    all_antis = []
+    for values in antinodes.values():
+        result.extend(values)
+        all_antis.extend(values)
+    result = list(set(result))
+    return len(result)
+
+
+def part2(data, nodes):
+    result = []
+    antinodes = {}
+    for node in nodes:
+        antinodes[node] = []
+        all_nodes = nodes[node]
+        for k in range(0, len(all_nodes)):
+            for l in range(k+1, len(all_nodes)):
+                coord_1, coord_2 = all_nodes[k], all_nodes[l]
+                antinodes[node].append(coord_1)
+                antinodes[node].append(coord_2)
+                dist_1, dist_2 = distance(coord_1, coord_2), distance(coord_2, coord_1)
+                anti_1, anti_2 = (coord_1[0] + dist_1[0], coord_1[1] + dist_1[1]), (coord_2[0] + dist_2[0], coord_2[1] + dist_2[1])
+                while within_bounds(anti_1[0], anti_1[1], data):
+                    antinodes[node].append(anti_1)
+                    anti_1 = (anti_1[0] + dist_1[0], anti_1[1] + dist_1[1])
+                while within_bounds(anti_2[0], anti_2[1], data):
+                    antinodes[node].append(anti_2)
+                    anti_2 = (anti_2[0] + dist_2[0], anti_2[1] + dist_2[1])
+    all_antis = []
+    for values in antinodes.values():
+        result.extend(values)
+        all_antis.extend(values)
+    result = list(set(result))
+    print_matrix(data, all_antis)
+    return len(result)
 
 
 def solve(puzzle_input):
-    data = parse(puzzle_input)
-    sol1 = part1(data)
-    sol2 = part2(data)
+    data, nodes = parse(puzzle_input)
+    sol1 = part1(data, nodes)
+    sol2 = part2(data, nodes)
     return sol1, sol2
 
 
