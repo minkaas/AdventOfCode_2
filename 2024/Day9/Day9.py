@@ -21,7 +21,6 @@ def parse(puzzle_input):
 
 
 def part1(data):
-    print(data)
     result = 0
     placement = 0
     i = 0
@@ -62,26 +61,28 @@ def part2(data):
     result = 0
     placement = 0
     change = True
-    better_data = []
     for i in range(0, len(data)):
-        better_data.append((data[i][0], data[i][1], i))
-    last_changed = better_data[-1][2] + 1
+        data[i] = (data[i][0], data[i][1], i)
+    last_changed = data[-1][2]
+    first_room = 0
     while change:
         change = False
-        for i in range(len(better_data)-1, -1, -1):
-            if better_data[i][2] < last_changed:
-                last_changed = better_data[i][2]
-                for j in range(0, i):
-                    if better_data[j][1] >= better_data[i][0]:
-                        better_data[i-1] = (better_data[i-1][0], better_data[i-1][1] + better_data[i][0] + better_data[i][1], better_data[i-1][2])
-                        better_data.insert(j+1, (better_data[i][0], better_data[j][1] - better_data[i][0], better_data[i][2]))
-                        better_data[j] = (better_data[j][0], 0, better_data[j][2])
-                        better_data.pop(i+1)
-                        change = True
-                        break
+        for i in range(last_changed, -1, -1):
+            for j in range(first_room, i):
+                if data[j][1] >= data[i][0]:
+                    data[i-1] = (data[i-1][0], data[i-1][1] + data[i][0] + data[i][1], data[i-1][2])
+                    data.insert(j+1, (data[i][0], data[j][1] - data[i][0], data[i][2]))
+                    data[j] = (data[j][0], 0, data[j][2])
+                    data.pop(i+1)
+                    change = True
+                    break
+            while data[first_room][1] == 0:
+                first_room += 1
+            if not change:
+                last_changed -= 1
             if change:
                 break
-    for i in better_data:
+    for i in data:
         for j in range(0, i[0]):
             result += i[2] * placement
             placement += 1
