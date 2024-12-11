@@ -20,16 +20,6 @@ def find_starts(data):
         for j in range(0, len(data)):
             if data[i][j] == 0:
                 starts.append((i, j))
-    # for i in range(0, len(data)):
-    #     if data[i][1] == 0:
-    #         starts.append((i, 1))
-    #     elif data[i][len(data[i])-2] == 0:
-    #         starts.append((i, len(data[i])-2))
-    # for j in range(0, len(data)):
-    #     if data[1][j] == 0:
-    #         starts.append((1 ,j))
-    #     elif data[len(data)-2][j] == 0:
-    #         starts.append((len(data)-2, j))
     return starts
 
 
