@@ -40,8 +40,9 @@ def part1(data):
                 quadrants[1] += 1
             elif loc[1] > tall // 2:
                 quadrants[3] += 1
+    average_quadrants = sum(quadrants) // len(quadrants)
     result = quadrants[0] * quadrants[1] * quadrants[2] * quadrants[3]
-    return result
+    return result, average_quadrants
 
 
 def neighbours(robot, locations):
@@ -52,7 +53,7 @@ def neighbours(robot, locations):
             return True
     return False
 
-def part2(data):
+def part2(data, average):
     result = 0
     seconds = 15000
     for i in range(0, seconds):
@@ -62,9 +63,22 @@ def part2(data):
             velocity = robot[1]
             robot[0] = ((position[0] + velocity[0]) % width, (position[1] + velocity[1]) % tall)
             locations.append(robot[0])
-        if len(list(set(locations))) == len(locations): # assumption I stole from reddit, sorry boys
-            print_grid(locations, i)
-            return i + 1
+        quadrants = [0, 0, 0, 0]
+        for loc in locations:
+            if loc[0] < width // 2:
+                if loc[1] < tall // 2:
+                    quadrants[0] += 1
+                elif loc[1] > tall // 2:
+                    quadrants[2] += 1
+            elif loc[0] > width // 2:
+                if loc[1] < tall // 2:
+                    quadrants[1] += 1
+                elif loc[1] > tall // 2:
+                    quadrants[3] += 1
+        for quad in quadrants:
+            if quad > average * 2:
+                print_grid(locations, i)
+                return i + 1
     return result
 
 
@@ -81,8 +95,8 @@ def print_grid(locations, i):
 
 def solve(puzzle_input):
     data = parse(puzzle_input)
-    sol1 = part1(data)
-    sol2 = part2(data)
+    sol1, average = part1(data)
+    sol2 = part2(data, average)
     return sol1, sol2
 
 
