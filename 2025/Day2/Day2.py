@@ -1,6 +1,5 @@
 import pathlib
 from time import time
-import textwrap
 
 
 def parse(puzzle_input):
@@ -25,15 +24,17 @@ def part1(IDs):
 
 def part2(IDs):
     result = 0
-    first_primes = [3, 5, 7, 11, 13, 17, 19]
+    divisors = {}
     for ID in IDs:
         first, last = ID.split("-")
         for i in range(int(first), int(last) + 1):
             value = str(i)
-            divisors = [x for x in range(2, len(value) + 1) if len(value) % x == 0]
-            for j in divisors:
-                values = textwrap.wrap(value, len(value) // j)
-                if len(set(values)) == 1:
+            if len(value) not in divisors:
+                divisors[len(value)] = [x for x in range(2, len(value) + 1) if len(value) % x == 0]
+            divs = divisors[len(value)]
+            for j in divs:
+                repeated_part = value[0:len(value) // j]
+                if repeated_part * j == value:
                     result += int(value)
                     break
     return result
