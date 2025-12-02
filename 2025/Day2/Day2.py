@@ -1,22 +1,41 @@
 import pathlib
 from time import time
+import textwrap
 
 
 def parse(puzzle_input):
-    values = puzzle_input.split("\n")
+    values = puzzle_input.split(",")
     data = []
     for value in values:
-        data.append(int(value))
+        data.append(value)
     return data
 
 
-def part1(data):
+def part1(IDs):
     result = 0
+    for ID in IDs:
+        first, last = ID.split("-")
+        for i in range(int(first), int(last) + 1):
+            value = str(i)
+            start, finish = value[:len(value) // 2], value[len(value) // 2:]
+            if start == finish:
+                result += int(value)
     return result
 
 
-def part2(data):
+def part2(IDs):
     result = 0
+    first_primes = [3, 5, 7, 11, 13, 17, 19]
+    for ID in IDs:
+        first, last = ID.split("-")
+        for i in range(int(first), int(last) + 1):
+            value = str(i)
+            divisors = [x for x in range(2, len(value) + 1) if len(value) % x == 0]
+            for j in divisors:
+                values = textwrap.wrap(value, len(value) // j)
+                if len(set(values)) == 1:
+                    result += int(value)
+                    break
     return result
 
 def solve(puzzle_input):
