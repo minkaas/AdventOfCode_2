@@ -12,28 +12,12 @@ def parse(puzzle_input):
 
 def part1(data):
     result = 0
-    for battery in data:
-        result += joltage_output(2, battery)
     return result
 
 
 def part2(data):
     result = 0
-    for battery in data:
-        result += joltage_output(12, battery)
     return result
-
-
-def joltage_output(num_of_batteries, battery):
-    battery = [int(d) for d in str(battery)]
-    joltage = ""
-    for i in range(0, num_of_batteries-1):
-        max_digit = max(battery[0:-num_of_batteries+1 + i])
-        joltage += str(max_digit)
-        battery = battery[battery.index(max_digit) + 1:len(battery)]
-    joltage += str(max(battery))
-    return int(joltage)
-
 
 def solve(puzzle_input):
     data = parse(puzzle_input)
