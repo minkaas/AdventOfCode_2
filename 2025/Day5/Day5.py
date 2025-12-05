@@ -44,8 +44,6 @@ def part2(ranges):
             ranges.pop(spots[0])
             ranges.pop(spots[1]-1)
             ranges.append(new_range)
-            print(range1, range2)
-            print(new_range)
     return ranges_sum(ranges)
 
 
